@@ -1,43 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Geolocation</title>
 </head>
 
 <body>
+    <div class="card">
+        <div class="header-section">
+            <h3>Nama : Fasya Tri Nugroho </h3>
+            <h3>NIM : 20240140220 </h3>
+        </div>
 
-    <h3>Nama : Fasya Tri Nugroho </h3>
-    <h3>NIM : 20240140220 </h3>
+        <div class="form-group">
+            <label for="inputKota">Lokasi :</label>
+            <div class="input-wrapper">
+                <input type="text" id="inputKota" placeholder="Masukkan nama tempat..." value="Bandung City">
+                <button type="button" id="btnCari">Cari</button>
+            </div>
+        </div>
 
-    <p>
-        Kota : 
-        <span id="lokasi"></span>
-    </p>
+        <div class="data-group">
+            <p>
+                Negara :
+                <span id="negara">-</span>
+            </p>
 
-    <br>
+            <p>
+                Provinsi :
+                <span id="provinsi">-</span>
+            </p>
 
-    <p>
-        Koordinat :
-        <span id="negara"></span>
-    </p>
+            <p>
+                Kecamatan :
+                <span id="kecamatan">-</span>
+            </p>
+
+            <div class="coords-row">
+                <p>
+                    Longitude :
+                    <span id="longitude">-</span>
+                </p>
+
+                <p>
+                    Latitude :
+                    <span id="latitude">-</span>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        fetch("/api/lokasi")
-            .then(response => response.json())
-            .then(data => {
+        function ambilDataLokasi(namaKota) {
+            fetch(`/api/lokasi?kota=${encodeURIComponent(namaKota)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
 
-                console.log(data);
+                    document.getElementById("negara").textContent = data.negara || "-";
+                    document.getElementById("provinsi").textContent = data.provinsi || "-";
+                    document.getElementById("kecamatan").textContent = data.kecamatan || "-";
+                    document.getElementById("longitude").textContent = data.longitude !== undefined ? data.longitude : "-";
+                    document.getElementById("latitude").textContent = data.latitude !== undefined ? data.latitude : "-";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
 
-                document.getElementById("lokasi").textContent = data.kota;
+        const inputKota = document.getElementById("inputKota");
+        const btnCari = document.getElementById("btnCari");
 
-                document.getElementById("negara").innerHTML = data.koordinat;
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
+        btnCari.addEventListener("click", () => {
+            const query = inputKota.value.trim();
+            if (query) ambilDataLokasi(query);
+        });
+
+        inputKota.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                const query = inputKota.value.trim();
+                if (query) ambilDataLokasi(query);
+            }
+        });
+
+        // Panggil pertama kali saat halaman dimuat
+        ambilDataLokasi(inputKota.value);
     </script>
-    
+
 </body>
+
 </html>
