@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocation</title>
+</head>
+
+<body>
+
+    <h3>Nama : Fasya Tri Nugroho </h3>
+    <h3>NIM : 20240140220 </h3>
+
+    <p>
+        Kota : 
+        <span id="lokasi"></span>
+    </p>
+
+    <br>
+
+    <p>
+        Koordinat :
+        <span id="negara"></span>
+    </p>
+
+    <script>
+        fetch("/api/lokasi")
+            .then(response => response.json())
+            .then(data => {
+
+                console.log(data);
+
+                document.getElementById("lokasi").textContent = data.lokasi;
+
+                document.getElementById("negara").innerHTML = data.koordinat;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    </script>
+    
+</body>
+</html>
