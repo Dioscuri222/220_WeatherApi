@@ -14,7 +14,7 @@ app.get("/api/lokasi", async (req, res) => {
     const apikey = process.env.MAPTILER_API_KEY;
     const baseUrl = process.env.MAPTILER_BASE_URL;
 
-    const url = `${baseUrl}/${encodeURIComponent(kota)}.json?key=${apikey}`;
+    const url = `${baseUrl}/${kota}.json?key=${apikey}`;
 
     try {
         const response = await axios.get(url);
